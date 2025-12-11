@@ -13,7 +13,7 @@ import time
 import random
 
 # URL de l'équipe nationale du Maroc sur Transfermarkt
-URL = "https://www.transfermarkt.fr/maroc/kader/verein/3575/saison_id/2024/plus/1"
+URL = "https://www.transfermarkt.com/morocco/kader/verein/3575/saison_id/2024/plus/1"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
