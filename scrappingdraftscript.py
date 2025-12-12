@@ -29,8 +29,7 @@ def get_player_details(player_url):
         
         details = {
             "height": "N/A",
-            "foot": "N/A",
-            "debut": "N/A"
+            "foot": "N/A"
         }
         
         # Method 1: Look for info-table with different possible structures
@@ -70,36 +69,13 @@ def get_player_details(player_url):
                             details["foot"] = foot_text
                             break
         
-        # Get national team debut
-        # Look for tables with national team data
-        tables = soup.find_all("table", {"class": "items"})
-        for table in tables:
-            rows = table.find_all("tr", class_=re.compile(r"(odd|even)"))
-            for row in rows:
-                # Check if this row mentions Morocco
-                row_text = row.get_text()
-                if "Morocco" in row_text or "Maroc" in row_text:
-                    # Try to find date cells
-                    date_cells = row.find_all("td", {"class": "zentriert"})
-                    for cell in date_cells:
-                        cell_text = cell.get_text(strip=True)
-                        # Look for date patterns like "Nov 15, 2019" or "15.11.2019"
-                        if re.search(r'\d{2}[./]\d{2}[./]\d{4}|\w{3}\s+\d{1,2},\s+\d{4}', cell_text):
-                            details["debut"] = cell_text
-                            break
-                    if details["debut"] != "N/A":
-                        break
-            if details["debut"] != "N/A":
-                break
-        
         return details
     
     except Exception as e:
         print(f"  ⚠ Error scraping details: {e}")
         return {
             "height": "N/A",
-            "foot": "N/A",
-            "debut": "N/A"
+            "foot": "N/A"
         }
 
 print("Fetching Morocco team data...")
@@ -152,8 +128,6 @@ for idx, row in enumerate(rows, 1):
                 status.append(f"H:{player_details['height']}")
             if player_details["foot"] != "N/A":
                 status.append(f"F:{player_details['foot']}")
-            if player_details["debut"] != "N/A":
-                status.append(f"D:✓")
             
             if status:
                 print(f" [{', '.join(status)}]")
@@ -163,8 +137,7 @@ for idx, row in enumerate(rows, 1):
             print(f"[{idx}/{total_players}] {name} - No profile URL")
             player_details = {
                 "height": "N/A",
-                "foot": "N/A",
-                "debut": "N/A"
+                "foot": "N/A"
             }
         
         players.append({
@@ -173,7 +146,6 @@ for idx, row in enumerate(rows, 1):
             "position": position,
             "height": player_details["height"],
             "foot": player_details["foot"],
-            "debut": player_details["debut"],
             "market_value": market_value
         })
         
@@ -194,9 +166,7 @@ print(f"Total players scraped: {len(players)}")
 # Show summary statistics
 height_found = sum(1 for p in players if p["height"] != "N/A")
 foot_found = sum(1 for p in players if p["foot"] != "N/A")
-debut_found = sum(1 for p in players if p["debut"] != "N/A")
 
 print(f"\nData collection summary:")
 print(f"  - Height: {height_found}/{len(players)} players")
 print(f"  - Foot: {foot_found}/{len(players)} players")
-print(f"  - Debut: {debut_found}/{len(players)} players")
